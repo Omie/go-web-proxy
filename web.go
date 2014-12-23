@@ -75,9 +75,9 @@ func proxyWget(res http.ResponseWriter, req *http.Request) {
 		h := u.Host
 		fp := filepath.Join(tempPath, h)
 		os.Chdir(fp)
-		//fp = filepath.Join(fp, "index.html")
-		//http.ServeFile(res, req, fp)
-		go http.ListenAndServe("0.0.0.0:8080", http.FileServer(http.Dir(fp)))
-		io.WriteString(res, "done")
+		fp = filepath.Join(fp, "index.html")
+		http.ServeFile(res, req, fp)
+		//go http.ListenAndServe("0.0.0.0:8080", http.FileServer(http.Dir(fp)))
+		//io.WriteString(res, "done")
 	}
 }
