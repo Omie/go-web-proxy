@@ -11,9 +11,16 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
+	"time"
 )
 
+var baseTempName string = "proxy"
+
 func main() {
+
+	go cleanup_service()
+
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/p/", proxy)
 	http.HandleFunc("/t/", proxyWget)
@@ -25,8 +32,33 @@ func main() {
 	}
 }
 
+func cleanup_service() {
+	/* a cleaning job that will cleanup all directories older than 5 minutes from now */
+	for {
+		time.Sleep(time.Duration(120) * time.Second)
+		files, _ := ioutil.ReadDir(os.TempDir())
+		for _, f := range files {
+			if f.IsDir() && strings.HasPrefix(f.Name(), baseTempName) {
+				t := time.Now().Local()
+				if f.ModTime().Before(t.Add(time.Duration(-120) * time.Second)) {
+					os.RemoveAll(filepath.Join(os.TempDir(), f.Name()))
+				}
+			}
+		}
+	}
+}
+
 func hello(res http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(res, "hello, world from %s", runtime.Version())
+	fmt.Fprintf(res, "hello, world from %s <br/>", runtime.Version())
+	files, _ := ioutil.ReadDir(os.TempDir())
+	count := 0
+	for _, f := range files {
+		if f.IsDir() && strings.HasPrefix(f.Name(), baseTempName) {
+			count++
+			//fmt.Fprintf(res, "%d - %s <br/>", count, f.Name())
+		}
+	}
+	fmt.Fprintf(res, "%d - total <br/>", count)
 }
 
 func proxy(res http.ResponseWriter, req *http.Request) {
@@ -62,7 +94,7 @@ func proxyWget(res http.ResponseWriter, req *http.Request) {
 	target := req.URL.Query().Get("target")
 	if len(target) != 0 {
 		//make temp dir
-		tempPath, err := ioutil.TempDir("", "proxy")
+		tempPath, err := ioutil.TempDir("", baseTempName)
 		if err != nil {
 			io.WriteString(res, "1004 "+err.Error())
 			return
