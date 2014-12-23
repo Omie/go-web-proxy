@@ -5,13 +5,17 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
 func main() {
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/p/", proxy)
+	http.HandleFunc("/t/", proxyWget)
 	bind := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	fmt.Printf("listening on %s...", bind)
 	err := http.ListenAndServe(bind, nil)
@@ -47,5 +51,33 @@ func proxy(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 		io.WriteString(res, string(body))
+	}
+}
+
+func proxyWget(res http.ResponseWriter, req *http.Request) {
+	target := req.URL.Query().Get("target")
+	if len(target) != 0 {
+		//make temp dir
+		tempPath, err := ioutil.TempDir("", "proxy")
+		if err != nil {
+			io.WriteString(res, err.Error())
+			return
+		}
+		fmt.Println(tempPath)
+		os.Chdir(tempPath)
+
+		_, err = exec.Command("wget", "-p", target).Output()
+		if err != nil {
+			io.WriteString(res, "1003"+err.Error())
+			return
+		}
+		u, _ := url.ParseRequestURI(target)
+		h := u.Host
+		fp := filepath.Join(tempPath, h)
+		os.Chdir(fp)
+		//fp = filepath.Join(fp, "index.html")
+		//http.ServeFile(res, req, fp)
+		go http.ListenAndServe("0.0.0.0:8080", http.FileServer(http.Dir(fp)))
+		io.WriteString(res, "done")
 	}
 }
