@@ -1,32 +1,49 @@
-OpenShift Go Cartridge
-======================
+go-web-proxy
+============
 
-Runs [Go](http://golang.org) on [OpenShift](https://openshift.redhat.com/app/login) using downloadable cartridge support. 
+A simple web based proxy written in Go. Can be easily hosted on [OpenShift](https://openshift.redhat.com/app/login)
 
-Once the app is created, you'll have a ".godir" file in the root of your repo. The single line is to tell the cartridge what the package of your Go code is.  A typical .godir file might contain:
+currently provides to options,
 
-    github.com/smarterclayton/goexample
+1] this is useful for a single file. It only pipes the response.
 
-which would tell OpenShift to place all of the files in the root of the Git repository inside of the <code>github.com/smarterclayton/goexample</code> package prior to compilation.
+    ` <hostname>/p/?target=http://foo.com/bar.png`
 
-When you push code to the repo, the cart will compile your package into <code>$OPENSHIFT_REPO_DIR/bin/</code>, with the last segment of the .godir being the name of the executable.  For the above .godir, your executable will be:
+2] this is useful to view a web page that contains other static images, css, js files
 
-    $OPENSHIFT_REPO_DIR/bin/goexample
-
-If you want to serve web requests (vs. running in the background), you'll need to listen on the ip address and port that OpenShift allocates - those are available as HOST and PORT in the environment.
-
-This default "web.go" file is a simple "hello, world" web service. 
-
-Any log output will be generated to <code>$OPENSHIFT_GO_LOG_DIR</code> on your OpenShift gear
+    `<hostname>/t/?target=http://foo.com/bar/`
 
 
-Build
------
+how to host on OpenShift
+------------------------
 
-When you push code to your repo, a Git postreceive hook runs and invokes a compile script.  This attempts to download the Go compiler environment for you into $OPENSHIFT_GO_DIR/cache.  Once the environment is setup, the cart runs
+- fork this repo
+- register an account on openshift.redhat.com, follow standard account activation procedure
+- go to **Settings** tab and add public key for ssh to work
+- go back to **Applications** tab, click **Add Application**
+- scroll down and select Go language under Other types
+- fill in the form, enter name/domain pair
+- enter git repo address for forked repo. enter **master** as branch name
+- keep default for rest but know that if you select **No scaling** then you won't be able to scale later
+- Click **Create Application**
+- Done
 
-    go get -tags openshift ./...
 
-on a working copy of your source. 
-The main file that you run will have access to two environment variables, $HOST and $PORT, which contain the internal address you must listen on to receive HTTP requests to your application.
+Add a bookmarklet to quickly use this proxy
+-------------------------------------------
+
+- Add a new bookmark in your browser
+- name it anything, say **proxy**
+- use this as its URL
+
+    `javascript:location.href='http://proxy-gopherlang.rhcloud.com/t/?target='+location.href`
+
+- now when you need to use this proxy, simply click the bookmark and it should work
+
+
+License
+-------
+
+MIT license
+
 
