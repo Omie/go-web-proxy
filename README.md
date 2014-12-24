@@ -36,7 +36,7 @@ Add a bookmarklet to quickly use this proxy
 - name it anything, say **proxy**
 - use this as its URL
 
-    `javascript:location.href='http://proxy-gopherlang.rhcloud.com/t/?target='+location.href`
+    `javascript:location.href='http://<your-hostname-here>/t/?target='+location.href`
 
 - now when you need to use this proxy, simply click the bookmark and it should work
 
