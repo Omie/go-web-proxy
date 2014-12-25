@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Go-web-proxy by Omie</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Go-web-proxy</h1>
+        <p>A simple web based proxy in Golang using wget</p>
+        <p class="view"><a href="https://github.com/Omie/go-web-proxy">View the Project on GitHub <small>Omie/go-web-proxy</small></a></p>
+        <ul>
+          <li><a href="https://github.com/Omie/go-web-proxy/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Omie/go-web-proxy/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Omie/go-web-proxy">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="go-web-proxy" class="anchor" href="#go-web-proxy" aria-hidden="true"><span class="octicon octicon-link"></span></a>go-web-proxy</h1>
+
+<p>A simple web based proxy written in Go. Can be easily hosted on <a href="https://openshift.redhat.com/app/login">OpenShift</a></p>
+
+<p>currently provides to options,</p>
+
+<p>1] this is useful for a single file. It only pipes the response.</p>
+
+<pre><code>` &lt;hostname&gt;/p/?target=http://foo.com/bar.png`
+</code></pre>
+
+<p>2] this is useful to view a web page that contains other static images, css, js files</p>
+
+<pre><code>`&lt;hostname&gt;/t/?target=http://foo.com/bar/`
+</code></pre>
+
+<h2>
+<a id="how-to-host-on-openshift" class="anchor" href="#how-to-host-on-openshift" aria-hidden="true"><span class="octicon octicon-link"></span></a>how to host on OpenShift</h2>
+
+<ul>
+<li>fork this repo</li>
+<li>register an account on openshift.redhat.com, follow standard account activation procedure</li>
+<li>go to <strong>Settings</strong> tab and add public key for ssh to work</li>
+<li>go back to <strong>Applications</strong> tab, click <strong>Add Application</strong>
+</li>
+<li>scroll down and select Go language under Other types</li>
+<li>fill in the form, enter name/domain pair</li>
+<li>enter git repo address for forked repo. enter <strong>master</strong> as branch name</li>
+<li>keep default for rest but know that if you select <strong>No scaling</strong> then you won't be able to scale later</li>
+<li>Click <strong>Create Application</strong>
+</li>
+<li>Done</li>
+</ul>
+
+<h2>
+<a id="add-a-bookmarklet-to-quickly-use-this-proxy" class="anchor" href="#add-a-bookmarklet-to-quickly-use-this-proxy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add a bookmarklet to quickly use this proxy</h2>
+
+<ul>
+<li>Add a new bookmark in your browser</li>
+<li>name it anything, say <strong>proxy</strong>
+</li>
+<li>
+<p>use this as its URL</p>
+
+<p><code>javascript:location.href='http://&lt;your-hostname-here&gt;/t/?target='+location.href</code></p>
+</li>
+<li><p>now when you need to use this proxy, simply click the bookmark and it should work</p></li>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>MIT license</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/Omie">Omie</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-50478828-4");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
