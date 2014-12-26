@@ -3,7 +3,7 @@ go-web-proxy
 
 A simple web based proxy written in Go. Can be easily hosted on [OpenShift](https://openshift.redhat.com/app/login)
 
-currently provides to options,
+currently provides two options,
 
 1] this is useful for a single file. It only pipes the response.
 
